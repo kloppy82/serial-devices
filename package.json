@@ -21,7 +21,7 @@
   "scripts": {
     "test": "mocha --exit \"test/**/*.js\"",
     "jshint": "jshint --show-non-errors --verbose lib/**/*.js",
-    "start": "NEEO_DEVICES_DIRECTORY=\"./lib/devices\" NEEO_DEVICES_EXCLUDED_DIRECTORIES=[\"lifx-cloud\"] neeo-sdk start",
+    "start": "NEEO_DEVICES_DIRECTORY=\"./lib/devices\" neeo-sdk start",
     "example:forwardaction": "node lib/forwardaction/index.js",
     "example:recipe": "node lib/recipe/listAllRecipes.js",
     "clean": "rm -rf ./dist && mkdir -p ./dist",
