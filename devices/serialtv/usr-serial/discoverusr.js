@@ -4,13 +4,14 @@ const dgram = require('dgram');
 const PORT = 48899;
 const HOST = '255.255.255.255';
 //const TIMEOUT = 3000;
-
 const message = new Buffer('www.usr.cn');
 const upd_client = dgram.createSocket('udp4');
 
-//var deviceinfo={IP:0,MAC:0}
-var answers = [];
-
+var device={
+	id: "MAC address",
+	name: "IP Address"
+}
+var answers = [];     
 
 module.exports.discoverDevices = function(timeout,callback) {
 	const timeoutObj = setTimeout(process_message, timeout);
@@ -18,7 +19,9 @@ module.exports.discoverDevices = function(timeout,callback) {
 
 	upd_client.on('message',(msg,info)=>{
 		//clearTimeout(timeoutObj);
-		answers.push(msg.toString().slice(0, -1).split(","));
+		device.id=msg.toString().split(",")[0];
+		device.name=msg.toString().split(",")[1];
+		answers.push(device);
 	});
 
 	upd_client.send(message, 0, message.length, PORT, HOST, (err, bytes) => {
@@ -35,7 +38,8 @@ module.exports.discoverDevices = function(timeout,callback) {
 		else{
 			console.log('Serial Converter unreachable')
 		}*/
-		upd_client.close();
+		//upd_client.close();
+		console.log('fucktahtshit')
 		callback(answers);
 	}
 }

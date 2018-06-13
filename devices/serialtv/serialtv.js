@@ -1,9 +1,10 @@
 'use strict';
 
 const neeoapi = require('neeo-sdk');
-const serial = require('./serialio');
-
-
+const debug = require('debug')('neeo:serialtv');
+const BluePromise = require('bluebird');
+const serial = require('./usr-serial/serialio');
+const usr=require('./usr-serial/discoverusr');
 /*
  * Device Controller
  * Events on that device from the Brain will be forwarded here for handling.
@@ -46,6 +47,15 @@ module.exports.onButtonPressed = function onButtonPressed(name, deviceId) {
 							break;
 		case 'MUTE TOGGLE': serial.write('MUTE\n\r');
 							break;
-
 	}
 };
+
+module.exports.getDevices=function(){
+	return new BluePromise((resolve) => {
+		//debug('discovery call', devices);
+		usr.discoverDevices(3000,(devices)=>{
+			debug('discovered devices:', devices);
+    		resolve(devices);
+    	});
+	})
+}
