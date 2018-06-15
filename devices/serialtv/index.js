@@ -2,9 +2,10 @@
 
 const neeoapi = require('neeo-sdk');
 const controller = require('./serialtv');
+const usr=require('./usr-serial/discoverusr');
+const serialio=require('./usr-serial/serialio');
+const debug = require('debug')('neeo:serialtv');
 
-
-var discoveredDevices;
 
 // first we set the device info, used to identify it on the Brain
 const serialdevice = neeoapi.buildDevice('Serial TV Controller')
@@ -19,31 +20,19 @@ const serialdevice = neeoapi.buildDevice('Serial TV Controller')
   .addButtonGroup('VOLUME')
   .addButtonGroup('Numpad')
   .addButtonGroup('Channel Zapper')
+  .addButtonGroup('Menu and Back')
+  .addButtonGroup('Controlpad')
+
  // .addButtonGroup('Color Buttons')
   .addButtonHandler(controller.onButtonPressed)
-
+ //.registerInitialiseFunction(serialio.connect)
+  .defineTiming({ powerOnDelayMs: 2000, sourceSwitchDelayMs: 500, shutdownDelayMs: 1000 })
   .enableDiscovery(
   {
     headerText: 'Find your converter!',
     description: 'Make sure the Serial converter is powered and the WORK LED is blinking'
   },
   controller.getDevices
-/*   function() {
-    console.log("start");
-    controller.getDevices();
-    console.log("stop");
-  return [
-     {
-       id: 'unique-device-id-001',
-       name: 'first device',
-     },
-     {
-       id: 'unique-device-id-002',
-       name: 'second device, but not reachable',
-       reachable: false
-     }
-   ];
-  }*/
 );
 
 module.exports = serialdevice;
